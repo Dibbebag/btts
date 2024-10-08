@@ -76,17 +76,28 @@
             max-width: 320px; /* Larghezza massima della griglia */
             z-index: 1; /* In primo piano */
         }
-        .thumbnail-container iframe {
-            width: 100%;
-            height: 110px; /* Altezza miniatura */
-            border: none;
+        .thumbnail {
+            position: relative;
+            cursor: pointer;
             border-radius: 8px;
+            overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
-            cursor: pointer; /* Cursore a mano per indicare l'interattività */
         }
-        .thumbnail-container iframe:hover {
-            transform: scale(1.05);
+        .thumbnail img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Black_Play_Button.png') no-repeat center center;
+            background-size: contain;
+            pointer-events: none;
         }
         .social-links {
             margin: 50px;
@@ -118,6 +129,7 @@
             display: none; /* Nascondi inizialmente */
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         .fullscreen-video iframe {
             width: 80%;
@@ -127,11 +139,25 @@
         .close-btn {
             position: absolute;
             top: 20px;
-            right: 20px;
-            font-size: 30px;
+            right: 30px;
+            font-size: 40px;
             color: #fff;
             cursor: pointer;
             z-index: 10000;
+        }
+
+        /* Responsività */
+        @media (max-width: 600px) {
+            .thumbnail-container {
+                max-width: 90%;
+            }
+            .main-video {
+                max-width: 90%;
+            }
+            .fullscreen-video iframe {
+                width: 95%;
+                height: 60%;
+            }
         }
     </style>
 </head>
@@ -144,14 +170,26 @@
     </div>
     
     <div class="video-container">
-        <iframe class="main-video" width="320" height="180" src="https://www.youtube.com/embed/1GFjf0s46ys?autoplay=1&controls=0&mute=0&encrypted-media=0" title="Promo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <iframe class="main-video" src="https://www.youtube.com/embed/1GFjf0s46ys?autoplay=1&controls=0&mute=0&encrypted-media=0" title="Promo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
     
     <div class="thumbnail-container">
-        <iframe src="https://www.youtube.com/embed/fqyIGr2cQ88?controls=0&mute=0&encrypted-media=0" title="Chop Suey" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
-        <iframe src="https://www.youtube.com/embed/tpnivJe5m_0?controls=0&mute=0&encrypted-media=0" title="Toxicity" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
-        <iframe src="https://www.youtube.com/embed/wi_SmaH1JKg?si=QxMJr-b8R0HrCalX" title="IEAIAIO" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
-        <iframe src="https://www.youtube.com/embed/WPXnbsKHufU?si=HTHXMkO_rr_f4SW_" title="Toxicity_Urban" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen onclick="openFullscreen(this.src)"></iframe>    
+        <div class="thumbnail" data-src="https://www.youtube.com/embed/fqyIGr2cQ88?autoplay=1&controls=1">
+            <img src="https://img.youtube.com/vi/fqyIGr2cQ88/hqdefault.jpg" alt="Chop Suey">
+            <div class="play-button"></div>
+        </div>
+        <div class="thumbnail" data-src="https://www.youtube.com/embed/tpnivJe5m_0?autoplay=1&controls=1">
+            <img src="https://img.youtube.com/vi/tpnivJe5m_0/hqdefault.jpg" alt="Toxicity">
+            <div class="play-button"></div>
+        </div>
+        <div class="thumbnail" data-src="https://www.youtube.com/embed/wi_SmaH1JKg?autoplay=1&controls=1">
+            <img src="https://img.youtube.com/vi/wi_SmaH1JKg/hqdefault.jpg" alt="IEAIAIO">
+            <div class="play-button"></div>
+        </div>
+        <div class="thumbnail" data-src="https://www.youtube.com/embed/WPXnbsKHufU?autoplay=1&controls=1">
+            <img src="https://img.youtube.com/vi/WPXnbsKHufU/hqdefault.jpg" alt="Toxicity_Urban">
+            <div class="play-button"></div>
+        </div>    
     </div>
 
     <!-- Contenitore per il video fullscreen -->
@@ -177,17 +215,39 @@
 
     <!-- Script JavaScript -->
     <script>
+        // Seleziona tutte le miniature
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const fullscreenVideo = document.getElementById('fullscreenVideo');
+        const fullscreenIframe = document.getElementById('fullscreenIframe');
+
+        // Aggiungi un evento di clic a ciascuna miniatura
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', () => {
+                const src = thumbnail.getAttribute('data-src');
+                openFullscreen(src);
+            });
+        });
+
+        // Funzione per aprire il video in fullscreen
         function openFullscreen(src) {
-            // Modifica l'URL per abilitare autoplay e mostrare i controlli
-            const fullscreenSrc = src.replace("controls=0", "controls=1&autoplay=1");
-            document.getElementById('fullscreenIframe').src = fullscreenSrc;
-            document.getElementById('fullscreenVideo').style.display = 'flex';
+            fullscreenIframe.src = src;
+            fullscreenVideo.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Disabilita lo scroll della pagina
         }
 
+        // Funzione per chiudere il video in fullscreen
         function closeFullscreen() {
-            document.getElementById('fullscreenIframe').src = '';
-            document.getElementById('fullscreenVideo').style.display = 'none';
+            fullscreenIframe.src = '';
+            fullscreenVideo.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Riabilita lo scroll della pagina
         }
+
+        // Chiudi il fullscreen se l'utente clicca fuori dall'iframe
+        fullscreenVideo.addEventListener('click', function(e) {
+            if (e.target === fullscreenVideo) {
+                closeFullscreen();
+            }
+        });
     </script>
 </body>
 </html>
