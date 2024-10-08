@@ -21,7 +21,7 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 10;
+            left: 10px; /* Aggiunto 'px' per l'unità di misura */
             width: 100%;
             height: 100%;
             background-image: url('https://i.postimg.cc/BbLnrGMh/logo-BTTS.jpg');
@@ -115,7 +115,7 @@
             height: 100vh;
             z-index: 9999;
             background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
+            display: none; /* Nascondi inizialmente */
             justify-content: center;
             align-items: center;
         }
@@ -155,7 +155,7 @@
     </div>
 
     <!-- Contenitore per il video fullscreen -->
-    <div id="fullscreenVideo" class="fullscreen-video" style="display: none;">
+    <div id="fullscreenVideo" class="fullscreen-video">
         <span class="close-btn" onclick="closeFullscreen()">×</span>
         <iframe id="fullscreenIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
@@ -170,4 +170,24 @@
         <a href="https://www.youtube.com/@BackToTheSystem-w8p" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
         </a>
-        <a href="mailto
+        <a href="mailto:backtothesystem.management@gmail.com">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail">
+        </a>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script>
+        function openFullscreen(src) {
+            // Modifica l'URL per abilitare autoplay e mostrare i controlli
+            const fullscreenSrc = src.replace("controls=0", "controls=1&autoplay=1");
+            document.getElementById('fullscreenIframe').src = fullscreenSrc;
+            document.getElementById('fullscreenVideo').style.display = 'flex';
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreenIframe').src = '';
+            document.getElementById('fullscreenVideo').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
