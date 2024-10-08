@@ -83,6 +83,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
+            cursor: pointer; /* Cursore a mano per indicare l'interattività */
         }
         .thumbnail-container iframe:hover {
             transform: scale(1.05);
@@ -104,6 +105,34 @@
         .social-links img:hover {
             transform: scale(1.1);
         }
+
+        /* Stili per l'ingrandimento del video */
+        .fullscreen-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .fullscreen-video iframe {
+            width: 80%;
+            height: 80%;
+            border-radius: 8px;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10000;
+        }
     </style>
 </head>
 <body>
@@ -119,10 +148,16 @@
     </div>
     
     <div class="thumbnail-container">
-        <iframe src="https://www.youtube.com/embed/fqyIGr2cQ88?controls=0&mute=0&encrypted-media=0" title="Chop Suey" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/tpnivJe5m_0?controls=0&mute=0&encrypted-media=0" title="Toxicity" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/wi_SmaH1JKg?si=QxMJr-b8R0HrCalX" title="IEAIAIO" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-        <iframe src="https://www.youtube.com/embed/WPXnbsKHufU?si=HTHXMkO_rr_f4SW_" title="Toxicity_Urban" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>    
+        <iframe src="https://www.youtube.com/embed/fqyIGr2cQ88?controls=0&mute=0&encrypted-media=0" title="Chop Suey" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
+        <iframe src="https://www.youtube.com/embed/tpnivJe5m_0?controls=0&mute=0&encrypted-media=0" title="Toxicity" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
+        <iframe src="https://www.youtube.com/embed/wi_SmaH1JKg?si=QxMJr-b8R0HrCalX" title="IEAIAIO" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen onclick="openFullscreen(this.src)"></iframe>
+        <iframe src="https://www.youtube.com/embed/WPXnbsKHufU?si=HTHXMkO_rr_f4SW_" title="Toxicity_Urban" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen onclick="openFullscreen(this.src)"></iframe>    
+    </div>
+
+    <!-- Contenitore per il video fullscreen -->
+    <div id="fullscreenVideo" class="fullscreen-video" style="display: none;">
+        <span class="close-btn" onclick="closeFullscreen()">×</span>
+        <iframe id="fullscreenIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
     
     <div class="social-links">
@@ -135,9 +170,4 @@
         <a href="https://www.youtube.com/@BackToTheSystem-w8p" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube">
         </a>
-        <a href="mailto:backtothesystem.management@gmail.com">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Gmail">
-        </a>
-    </div>
-</body>
-</html>
+        <a href="mailto
